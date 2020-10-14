@@ -1,7 +1,7 @@
 package com.capstone.alarmengine;
 
-import com.capstone.alarmengine.model.Item;
-import com.capstone.alarmengine.repository.ItemRepository;
+import com.capstone.alarmengine.model.Device;
+import com.capstone.alarmengine.repository.DeviceRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -22,27 +22,27 @@ public class AlarmEngineApplication {
 	}
 
 	@Bean
-	CommandLineRunner demo(ItemRepository itemRepository) {
+	CommandLineRunner demo(DeviceRepository itemRepository) {
 		return args -> {
 
 			log.info("starting");
 			itemRepository.deleteAll();
 
-			Item GeneratorsWest1 = new Item("GeneratorsWest1");
-			Item GeneratorsWest2 = new Item("GeneratorsWest2");
-			Item GeneratorsGEN1 = new Item("GeneratorsGEN1");
-			Item GeneratorsGEN3 = new Item("GeneratorsGEN3");
-			Item BusTiesCPL_XA = new Item("BusTiesCPL_XA");
-			Item TransfersTRF_To_A = new Item("TransfersTRF_To_A");
-			Item IncomersINC_A = new Item("IncomersINC_A");
-			Item BusTiesCPL_AB = new Item("BusTiesCPL_AB");
-			Item IncomersINC_B = new Item("IncomersINC_B");
-			Item TransfersTRF_To_B = new Item("TransfersTRF_To_B");
-			Item BusTiesCPL_BY = new Item("BusTiesCPL_BY");
-			Item GeneratorsGEN2 = new Item("GeneratorsGEN2");
-			Item GeneratorsEast1 = new Item("GeneratorsEast1");
-			Item GeneratorsEast2 = new Item("GeneratorsEast2");
-			Item GeneratorsGEN4 = new Item("GeneratorsGEN4");
+			Device GeneratorsWest1 = new Device("GeneratorsWest1");
+			Device GeneratorsWest2 = new Device("GeneratorsWest2");
+			Device GeneratorsGEN1 = new Device("GeneratorsGEN1");
+			Device GeneratorsGEN3 = new Device("GeneratorsGEN3");
+			Device BusTiesCPL_XA = new Device("BusTiesCPL_XA");
+			Device TransfersTRF_To_A = new Device("TransfersTRF_To_A");
+			Device IncomersINC_A = new Device("IncomersINC_A");
+			Device BusTiesCPL_AB = new Device("BusTiesCPL_AB");
+			Device IncomersINC_B = new Device("IncomersINC_B");
+			Device TransfersTRF_To_B = new Device("TransfersTRF_To_B");
+			Device BusTiesCPL_BY = new Device("BusTiesCPL_BY");
+			Device GeneratorsGEN2 = new Device("GeneratorsGEN2");
+			Device GeneratorsEast1 = new Device("GeneratorsEast1");
+			Device GeneratorsEast2 = new Device("GeneratorsEast2");
+			Device GeneratorsGEN4 = new Device("GeneratorsGEN4");
 
 			log.info("connecting");
 

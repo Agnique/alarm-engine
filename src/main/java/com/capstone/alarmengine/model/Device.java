@@ -12,32 +12,32 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @NodeEntity
-public class Item {
+public class Device {
     @Id @GeneratedValue private Long id;
 
     private String name;
 
-    public Item() {
+    public Device() {
 
     }
-    public Item(String name) {
+    public Device(String name) {
         this.name = name;
     }
 
     @Relationship(type = "CONNECT", direction = Relationship.OUTGOING)
-    public Set<Item> connectedItems;
+    public Set<Device> connectedDevices;
 
-    public void connect(Item item) {
-        if (connectedItems == null) {
-            connectedItems = new HashSet<>();
+    public void connect(Device device) {
+        if (connectedDevices == null) {
+            connectedDevices = new HashSet<>();
         }
-        connectedItems.add(item);
+        connectedDevices.add(device);
     }
 
     public String toString() {
         return this.name + "'s connected items => "
-                + Optional.ofNullable(this.connectedItems).orElse(
-                        Collections.emptySet()).stream().map(Item::getName).collect(Collectors.toList());
+                + Optional.ofNullable(this.connectedDevices).orElse(
+                        Collections.emptySet()).stream().map(Device::getName).collect(Collectors.toList());
     }
 
     public String getName() {
