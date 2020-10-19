@@ -24,8 +24,22 @@ public class Device {
         this.name = name;
     }
 
+    public Device(String name, Set<Device> connectedDevices) {
+        this.name = name;
+        this.connectedDevices = connectedDevices;
+    }
+
+
+    public void setConnectedDevices(Set<Device> connectedDevices) {
+        this.connectedDevices = connectedDevices;
+    }
+
     @Relationship(type = "CONNECT", direction = Relationship.OUTGOING)
     public Set<Device> connectedDevices;
+
+    public Set<Device> getConnectedDevices() {
+        return connectedDevices;
+    }
 
     public void connect(Device device) {
         if (connectedDevices == null) {

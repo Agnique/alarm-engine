@@ -1,0 +1,137 @@
+[
+  {
+    "name": "GeneratorsWest1",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Generators.GEN1"
+      }
+    ]
+  },
+  {
+    "name": "GeneratorsWest2",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Generators.GEN3"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.Generators.GEN1",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_XA"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.Generators.GEN3",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_XA"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.Sources.Utilities.West",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Incomers.INC_A"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.Incomers.INC_A",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Transfers.TRF_To_A"
+      },
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_XA"
+      },
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_AB"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.BusTies.CPL_XA",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Transfers.TRF_To_A"
+      },
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_AB"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.BusTies.CPL_AB",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Transfers.TRF_To_B"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.Sources.Utilities.Eest",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Incomers.INC_B"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.Incomers.INC_B",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Transfers.TRF_To_B"
+      },
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_BY"
+      },
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_AB"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.BusTies.CPL_BY",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Transfers.TRF_To_B"
+      }
+    ]
+  },
+  {
+    "name": "GeneratorsEast1",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Generators.GEN2"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.Generators.GEN2",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_BY"
+      }
+    ]
+  },
+  {
+    "name": "GeneratorsEast2",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.Generators.GEN4"
+      }
+    ]
+  },
+  {
+    "name": "PLSDCluster.High_Voltage.Generators.GEN4",
+    "connectedDevices": [
+      {
+        "name": "PLSDCluster.High_Voltage.BusTies.CPL_BY"
+      }
+    ]
+  }
+]
