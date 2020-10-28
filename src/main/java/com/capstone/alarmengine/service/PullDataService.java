@@ -3,6 +3,7 @@ package com.capstone.alarmengine.service;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import net.minidev.json.JSONObject;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import reactor.netty.tcp.TcpClient;
 
 import javax.net.ssl.SSLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -76,17 +78,18 @@ public class PullDataService {
         return this.antiForgerytoken;
     }
 
-    public String getTagData() {
+    public String getTagData(List<String> dataPointIds) {
         String resp;
+        JSONObject body = new JSONObject();
+        body.put("Project", "PLS_Example");
+        body.put("DocumentId", "TestDocument");
+        body.put("DataPointIds", dataPointIds);
+
         resp = this.webClient.post()
                 .uri("/PsoDataService/api/realtime-data/read-data-points")
                 .header("Anti-Forgery-Token", this.antiForgerytoken)
                 .header(HttpHeaders.CONTENT_TYPE, "application/json")
-                .body(BodyInserters.fromValue("{\n" +
-                        "    \"Project\": \"PLS_Example\",\n" +
-                        "    \"DocumentId\": \"TestDocument\",\n" +
-                        "    \"DataPointIds\": [\"PLSDCluster.Sources.Generators.West1.BusColor\"]\n" +
-                        "}"))
+                .body(BodyInserters.fromValue(body.toString()))
                 .cookies(cookies -> cookies.addAll(SessionCookies))
                 .retrieve()
                 .bodyToMono(String.class)
