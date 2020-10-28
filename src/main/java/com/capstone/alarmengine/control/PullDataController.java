@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,8 +18,21 @@ public class PullDataController {
     PullDataService pullDataService;
 
     @GetMapping("/{id}")
-    public String getDataPoint(@PathVariable String id) {
-        pullDataService.validateCredentials();
-        return pullDataService.getTagData(Arrays.asList(id));
+    public String postRealTme(@PathVariable String id) throws IOException {
+        pullDataService.getRealTimeToken();
+        return pullDataService.postRealTimeData(Arrays.asList(id));
     }
+
+    @GetMapping("/events")
+    public String postEvents() throws IOException {
+        pullDataService.getAlarmToken();
+        return pullDataService.postEventData();
+    }
+
+    @GetMapping("/alarms")
+    public String postAlarms() throws IOException {
+        pullDataService.getAlarmToken();
+        return pullDataService.postAlarmData();
+    }
+
 }
