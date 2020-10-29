@@ -18,20 +18,17 @@ public class PullDataController {
     PullDataService pullDataService;
 
     @GetMapping("/{id}")
-    public String postRealTme(@PathVariable String id) throws IOException {
-        pullDataService.getRealTimeToken();
+    public String postRealTme(@PathVariable String id) {
         return pullDataService.postRealTimeData(Arrays.asList(id));
     }
 
     @GetMapping("/events")
-    public String postEvents() throws IOException {
-        pullDataService.getAlarmToken();
+    public String postEvents() {
         return pullDataService.postEventData();
     }
 
     @GetMapping("/alarms")
-    public String postAlarms() throws IOException {
-        pullDataService.getAlarmToken();
+    public String postAlarms() {
         return pullDataService.postAlarmData();
     }
 

@@ -16,10 +16,14 @@ public class Device {
     @Id @GeneratedValue private Long id;
 
     private String name;
+    private Boolean BkrOpen; // Breaker Open
+    private Float la;    // Current A
+    private Float lb;    // Current B
+    private Float lc;    // Current B
+    private Float Vab;    // Voltage A-B
+    private Float Vbc;    // Voltage B-C
+    private Float Vca;    // Voltage C-A
 
-    public Device() {
-
-    }
     public Device(String name) {
         this.name = name;
     }
@@ -29,6 +33,66 @@ public class Device {
         this.connectedDevices = connectedDevices;
     }
 
+
+    public Boolean getBkrOpen() {
+        return BkrOpen;
+    }
+
+    public Float getLa() {
+        return la;
+    }
+
+    public Float getLb() {
+        return lb;
+    }
+
+    public Float getLc() {
+        return lc;
+    }
+
+    public Float getVab() {
+        return Vab;
+    }
+
+    public Float getVbc() {
+        return Vbc;
+    }
+
+    public Float getVca() {
+        return Vca;
+    }
+
+    public void setBkrOpen(Boolean bkrOpen) {
+        BkrOpen = bkrOpen;
+    }
+
+    public void setLa(Float la) {
+        this.la = la;
+    }
+
+    public void setLb(Float lb) {
+        this.lb = lb;
+    }
+
+    public void setLc(Float lc) {
+        this.lc = lc;
+    }
+
+    public void setVab(Float vab) {
+        Vab = vab;
+    }
+
+    public void setVbc(Float vbc) {
+        Vbc = vbc;
+    }
+
+    public void setVca(Float vca) {
+        Vca = vca;
+    }
+
+    public Device() {
+
+    }
 
     public void setConnectedDevices(Set<Device> connectedDevices) {
         this.connectedDevices = connectedDevices;

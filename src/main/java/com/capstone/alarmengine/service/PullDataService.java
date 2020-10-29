@@ -41,11 +41,9 @@ public class PullDataService {
                 .clientConnector(new ReactorClientHttpConnector(httpClient.followRedirect(true)))
                 .baseUrl("https://52.165.21.112")
                 .build();
-        try{
-            loginService();
-        }catch (Exception e){
-            throw new SSLException("Unable to Login. Please check login credentials again.");
-        }
+        login();
+        getRealTimeToken();
+        getAlarmToken();
     }
 
     private String getToken(String resp, String tokenName, String delim) {
@@ -58,7 +56,7 @@ public class PullDataService {
         return resp.substring(i, j);
     }
 
-    public void loginService(){
+    public void login(){
         String webResponse;
         webResponse = this.webClient.get().uri("/webhmi/Auth?ReturnUrl=%2fwebhmi").retrieve().bodyToMono(String.class).block();
 
@@ -76,7 +74,7 @@ public class PullDataService {
         }
     }
 
-    public String getRealTimeToken() throws IOException {
+    public String getRealTimeToken() {
         String response = this.webClient
                 .get()
                 .uri("/WebHmi/HmiTgml.aspx")
@@ -107,7 +105,7 @@ public class PullDataService {
         return response;
     }
 
-    public String getAlarmToken() throws IOException{
+    public String getAlarmToken() {
         String response = this.webClient
                 .get()
                 .uri("/WebHmi/Alarms")
