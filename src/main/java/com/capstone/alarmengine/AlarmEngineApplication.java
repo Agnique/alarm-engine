@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
 import org.springframework.data.util.Pair;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import java.io.IOException;
@@ -25,6 +26,7 @@ import java.util.Set;
 @SpringBootApplication
 @EnableNeo4jRepositories
 @EnableTransactionManagement
+@EnableScheduling
 public class AlarmEngineApplication {
 	private final static Logger log = LoggerFactory.getLogger(AlarmEngineApplication.class);
 

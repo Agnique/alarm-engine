@@ -17,12 +17,12 @@ public class Device {
 
     private String name;
     private Boolean BkrOpen; // Breaker Open
-    private Float la;    // Current A
-    private Float lb;    // Current B
-    private Float lc;    // Current B
-    private Float Vab;    // Voltage A-B
-    private Float Vbc;    // Voltage B-C
-    private Float Vca;    // Voltage C-A
+    private Double Ia;    // Current A
+    private Double Ib;    // Current B
+    private Double Ic;    // Current B
+    private Double Vab;    // Voltage A-B
+    private Double Vbc;    // Voltage B-C
+    private Double Vca;    // Voltage C-A
 
     public Device(String name) {
         this.name = name;
@@ -38,27 +38,27 @@ public class Device {
         return BkrOpen;
     }
 
-    public Float getLa() {
-        return la;
+    public Double getIa() {
+        return Ia;
     }
 
-    public Float getLb() {
-        return lb;
+    public Double getIb() {
+        return Ib;
     }
 
-    public Float getLc() {
-        return lc;
+    public Double getIc() {
+        return Ic;
     }
 
-    public Float getVab() {
+    public Double getVab() {
         return Vab;
     }
 
-    public Float getVbc() {
+    public Double getVbc() {
         return Vbc;
     }
 
-    public Float getVca() {
+    public Double getVca() {
         return Vca;
     }
 
@@ -66,27 +66,27 @@ public class Device {
         BkrOpen = bkrOpen;
     }
 
-    public void setLa(Float la) {
-        this.la = la;
+    public void setIa(Double ia) {
+        this.Ia = ia;
     }
 
-    public void setLb(Float lb) {
-        this.lb = lb;
+    public void setIb(Double ib) {
+        this.Ib = ib;
     }
 
-    public void setLc(Float lc) {
-        this.lc = lc;
+    public void setIc(Double ic) {
+        this.Ic = ic;
     }
 
-    public void setVab(Float vab) {
+    public void setVab(Double vab) {
         Vab = vab;
     }
 
-    public void setVbc(Float vbc) {
+    public void setVbc(Double vbc) {
         Vbc = vbc;
     }
 
-    public void setVca(Float vca) {
+    public void setVca(Double vca) {
         Vca = vca;
     }
 

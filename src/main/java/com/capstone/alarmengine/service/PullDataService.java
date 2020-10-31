@@ -41,9 +41,6 @@ public class PullDataService {
                 .clientConnector(new ReactorClientHttpConnector(httpClient.followRedirect(true)))
                 .baseUrl("https://52.165.21.112")
                 .build();
-        login();
-        getRealTimeToken();
-        getAlarmToken();
     }
 
     private String getToken(String resp, String tokenName, String delim) {
