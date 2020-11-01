@@ -27,8 +27,9 @@ public class DeviceService {
     public Stream<Device> getAllDevices() {
         return deviceRepository.findAllBy();
     }
-
-    @Scheduled(fixedRate = 5000)
+    public List<Device> getAllDownstreamDevices(String name) {return deviceRepository.findAllDownstreamDevices(name);}
+    
+    @Scheduled(fixedRate = 1000)
     void updateAllDevices() {
         pullDataService.login();
         pullDataService.getRealTimeToken();

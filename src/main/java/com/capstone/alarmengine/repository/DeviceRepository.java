@@ -23,5 +23,10 @@ public interface DeviceRepository extends Neo4jRepository<Device, Long> {
     @Query("MATCH (d: Device) RETURN d")
     List<Device> findAllDevices();
 
+    @Query("MATCH (d: Device)-[:CONNECT*1..]->(remote_d: Device)\n" +
+            "WHERE d.name = $0\n" +
+            "RETURN remote_d")
+    List<Device> findAllDownstreamDevices(String name);
+
 
 }

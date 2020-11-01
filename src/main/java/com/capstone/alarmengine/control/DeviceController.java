@@ -33,4 +33,9 @@ public class DeviceController {
             return new ResponseEntity<Device>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/downstream/{name}")
+    public List<Device> getDownstreamDevices(@PathVariable String name) {
+        return deviceService.getAllDownstreamDevices(name);
+    }
 }
