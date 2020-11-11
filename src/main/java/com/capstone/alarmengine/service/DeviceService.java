@@ -2,15 +2,24 @@ package com.capstone.alarmengine.service;
 
 import com.capstone.alarmengine.model.Device;
 import com.capstone.alarmengine.repository.DeviceRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @Service
@@ -21,6 +30,8 @@ public class DeviceService {
     @Autowired
     private PullDataService pullDataService;
 
+    Logger log = LoggerFactory.getLogger(DeviceService.class);
+
     public Device getDevice(String name) {
         return deviceRepository.findByName(name);
     }
@@ -28,7 +39,7 @@ public class DeviceService {
         return deviceRepository.findAllBy();
     }
     public List<Device> getAllDownstreamDevices(String name) {return deviceRepository.findAllDownstreamDevices(name);}
-    
+
     @Scheduled(fixedRate = 1000)
     void updateAllDevices() {
         pullDataService.login();
@@ -38,8 +49,9 @@ public class DeviceService {
     }
 
     void updateDevice(Device d) {
-        String name = d.getName();
+
         if (d == null) return;
+        String name = d.getName();
         String[] doubleTags = {"Ia", "Ib", "Ic", "Vab", "Vbc", "Vca"};
         String[] boolTags = {"BkrOpen"};
         for (String tag : doubleTags) {
@@ -74,7 +86,7 @@ public class DeviceService {
             JSONObject jsob = new JSONObject(res);
             String valueStr = jsob.optJSONArray("Data").getJSONObject(0).optString("Value");
             if (valueStr.length() == 0) continue;
-            Boolean value = valueStr == "0" ? true : false;
+            Boolean value = valueStr.equals("0") ? true : false;
             switch (tag) {
                 case "BkrOpen":
                     d.setBkrOpen(value);
@@ -82,6 +94,38 @@ public class DeviceService {
             }
         }
         deviceRepository.save(d);
+    }
+
+    public void updateModel() {
+        log.info("starting");
+        deviceRepository.deleteAll();
+
+        log.info("connecting");
+
+        ObjectMapper mapper = new ObjectMapper();
+        TypeReference<List<Device>> typeReference = new TypeReference<List<Device>>() {};
+
+        // InputStream inputStream = TypeReference.class.getResourceAsStream("/json/model.json");
+        try {
+            File modelFile = new File("./uploads/model.json");
+            InputStream inputStream = new FileInputStream(modelFile);
+            List<Device> devices = mapper.readValue(inputStream, typeReference);
+            for (Device device : devices) {
+                log.info(device.getName());
+                Device d1 = deviceRepository.getDeviceByName(device.getName());
+                if (d1 == null) d1 = new Device(device.getName());
+                Set<Device> neighbors = device.getConnectedDevices();
+                for (Device nei : neighbors) {
+                    Device d2 = deviceRepository.getDeviceByName(nei.getName());
+                    if (d2 == null) d2 = nei;
+                    d1.connect(d2);
+                }
+                deviceRepository.save(d1);
+            }
+            log.info("Model saved to database.");
+        } catch (IOException e){
+            log.info("Unable to save model: " + e.getMessage());
+        }
     }
 
 }
