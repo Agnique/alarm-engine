@@ -5,18 +5,26 @@ import org.neo4j.ogm.annotation.Id;
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Relationship;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @NodeEntity
 public class Device {
     @Id @GeneratedValue private Long id;
 
+    private static final HashMap<String, String> substation_map = new HashMap<>() {
+        {
+            put("High_Voltage", "High_Voltage");
+            put("Sources", "High_Voltage");
+            put("Medium_Voltage", "Medium_Voltage");
+            put("Low_Voltage", "Low_Voltage");
+        }
+    };
+
     private String name;
-    private Boolean BkrOpen; // Breaker Open
+
+    private String substation; //High_Voltage, Medium_Voltage, Low_Voltage
+
     private Double Ia;    // Current A
     private Double Ib;    // Current B
     private Double Ic;    // Current B
@@ -24,18 +32,30 @@ public class Device {
     private Double Vbc;    // Voltage B-C
     private Double Vca;    // Voltage C-A
 
+    private String Breaker; // Is Breaker Open or Closed
+
+    private Boolean isTripped; //Is Breaker Tripped
+
+    private Boolean ConnectedToEnergizedSource; // Is Connected To Energized Source
+
     public Device(String name) {
         this.name = name;
     }
 
     public Device(String name, Set<Device> connectedDevices) {
         this.name = name;
+        this.substation = "";
+        this.setSubstation();
         this.connectedDevices = connectedDevices;
     }
 
+    public Boolean getIsTripped(){
+        return isTripped;
+    }
 
-    public Boolean getBkrOpen() {
-        return BkrOpen;
+
+    public String getBreaker() {
+        return Breaker;
     }
 
     public Double getIa() {
@@ -62,32 +82,50 @@ public class Device {
         return Vca;
     }
 
-    public void setBkrOpen(Boolean bkrOpen) {
-        BkrOpen = bkrOpen;
+    public String getSubstation() {
+        return substation;
     }
 
-    public void setIa(Double ia) {
-        this.Ia = ia;
+    public void setSubstation() {
+        String[] subNames = this.name.split("\\.");
+        for(String subName: subNames){
+            if(substation_map.containsKey(subName)){
+                this.substation = substation_map.get(subName);
+                break;
+            }
+        }
     }
 
-    public void setIb(Double ib) {
-        this.Ib = ib;
+    public void setIsTripped(Boolean isTripped){
+        this.isTripped = isTripped;
     }
 
-    public void setIc(Double ic) {
-        this.Ic = ic;
+    public void setBreaker(String Breaker) {
+        this.Breaker = Breaker;
     }
 
-    public void setVab(Double vab) {
-        Vab = vab;
+    public void setIa(Double Ia) {
+        this.Ia = Ia;
     }
 
-    public void setVbc(Double vbc) {
-        Vbc = vbc;
+    public void setIb(Double Ib) {
+        this.Ib = Ib;
     }
 
-    public void setVca(Double vca) {
-        Vca = vca;
+    public void setIc(Double Ic) {
+        this.Ic = Ic;
+    }
+
+    public void setVab(Double Vab) {
+        this.Vab = Vab;
+    }
+
+    public void setVbc(Double Vbc) {
+        this.Vbc = Vbc;
+    }
+
+    public void setVca(Double Vca) {
+        this.Vca = Vca;
     }
 
     public Device() {

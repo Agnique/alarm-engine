@@ -46,18 +46,20 @@ public class DeviceService {
         pullDataService.getRealTimeToken();
         Stream<Device> devices = getAllDevices();
         devices.forEach(this::updateDevice);
+        log.info("NEW: All nodes get updated.");
     }
 
     void updateDevice(Device d) {
 
         if (d == null) return;
         String name = d.getName();
+        d.setSubstation();
         String[] doubleTags = {"Ia", "Ib", "Ic", "Vab", "Vbc", "Vca"};
-        String[] boolTags = {"BkrOpen"};
+        String[] boolTags = {"BkrOpen","isTripped"};
         for (String tag : doubleTags) {
             String res = pullDataService.postRealTimeData(Arrays.asList(name+"."+tag));
-            JSONObject jsob = new JSONObject(res);
-            String valueStr = jsob.optJSONArray("Data").getJSONObject(0).optString("Value");
+            JSONObject object = new JSONObject(res);
+            String valueStr = object.optJSONArray("Data").getJSONObject(0).optString("Value");
             if (valueStr.length() == 0) continue;
             Double value = Double.valueOf(valueStr);
             switch (tag) {
@@ -83,16 +85,20 @@ public class DeviceService {
         }
         for (String tag : boolTags) {
             String res = pullDataService.postRealTimeData(Arrays.asList(name+"."+tag));
-            JSONObject jsob = new JSONObject(res);
-            String valueStr = jsob.optJSONArray("Data").getJSONObject(0).optString("Value");
+            JSONObject object = new JSONObject(res);
+            String valueStr = object.optJSONArray("Data").getJSONObject(0).optString("Value");
             if (valueStr.length() == 0) continue;
-            Boolean value = valueStr.equals("0") ? true : false;
             switch (tag) {
                 case "BkrOpen":
-                    d.setBkrOpen(value);
+                    d.setBreaker(valueStr.equals("0") ? "open" : "closed");
+                    break;
+                case "isTripped":
+                    d.setIsTripped(valueStr.equals("0") ? false : true);
                     break;
             }
         }
+
+
         deviceRepository.save(d);
     }
 
@@ -122,9 +128,9 @@ public class DeviceService {
                 }
                 deviceRepository.save(d1);
             }
-            log.info("Model saved to database.");
+            log.info("INITIAL: Model saved to database.");
         } catch (IOException e){
-            log.info("Unable to save model: " + e.getMessage());
+            log.info("INITIAL: Unable to save model: " + e.getMessage());
         }
     }
 
