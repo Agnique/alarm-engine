@@ -28,5 +28,16 @@ public interface DeviceRepository extends Neo4jRepository<Device, Long> {
             "RETURN remote_d")
     List<Device> findAllDownstreamDevices(String name);
 
+    @Query("MATCH (d1: Device),(d2: Device)\n" +
+            "WHERE d1.name = $0 AND d2.name = $1\n" +
+            "MERGE (d1)-[r: TRANSMIT]->(d2)\n")
+    void createTransmit(String name1, String name2);
+
+    @Query("MATCH (d1: Device)-[r: TRANSMIT]->(d2: Device)\n" +
+            "WHERE d1.name = $0 AND d2.name = $1\n" +
+            "DELETE r\n")
+    void deleteTransmit(String name1, String name2);
+
+
 
 }

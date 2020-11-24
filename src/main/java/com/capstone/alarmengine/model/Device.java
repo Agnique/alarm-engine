@@ -32,7 +32,7 @@ public class Device {
     private Double Vbc;    // Voltage B-C
     private Double Vca;    // Voltage C-A
 
-    private String Breaker; // Is Breaker Open or Closed
+    private Boolean bkrOpen; // Is Breaker Open or Closed
 
     private Boolean isTripped; //Is Breaker Tripped
 
@@ -40,22 +40,35 @@ public class Device {
 
     public Device(String name) {
         this.name = name;
+        setSubstation();
+        isTripped = true;
+        bkrOpen = true;
+        Ia = .0;
+        Ib = .0;
+        Ic = .0;
+        Vab = .0;
+        Vbc = .0;
+        Vca = .0;
     }
 
-    public Device(String name, Set<Device> connectedDevices) {
-        this.name = name;
-        this.substation = "";
-        this.setSubstation();
-        this.connectedDevices = connectedDevices;
+    public Device() {
+        name = "";
+        isTripped = true;
+        bkrOpen = true;
+        Ia = .0;
+        Ib = .0;
+        Ic = .0;
+        Vab = .0;
+        Vbc = .0;
+        Vca = .0;
     }
 
     public Boolean getIsTripped(){
         return isTripped;
     }
 
-
-    public String getBreaker() {
-        return Breaker;
+    public Boolean getBkrOpen() {
+        return bkrOpen;
     }
 
     public Double getIa() {
@@ -100,8 +113,8 @@ public class Device {
         this.isTripped = isTripped;
     }
 
-    public void setBreaker(String Breaker) {
-        this.Breaker = Breaker;
+    public void setBkrOpen(Boolean bkrOpen) {
+        this.bkrOpen = bkrOpen;
     }
 
     public void setIa(Double Ia) {
@@ -128,10 +141,6 @@ public class Device {
         this.Vca = Vca;
     }
 
-    public Device() {
-
-    }
-
     public void setConnectedDevices(Set<Device> connectedDevices) {
         this.connectedDevices = connectedDevices;
     }
@@ -149,6 +158,30 @@ public class Device {
         }
         connectedDevices.add(device);
     }
+
+    public Set<Device> getTransmitDevices() {
+        return transmitDevices;
+    }
+
+    public void setTransmitDevices(Set<Device> transmitDevices) {
+        this.transmitDevices = transmitDevices;
+    }
+
+    @Relationship(type = "TRANSMIT", direction = Relationship.OUTGOING)
+    public Set<Device> transmitDevices;
+
+    public void transmit(Device device) {
+        if (transmitDevices == null) {
+            transmitDevices = new HashSet<>();
+        }
+        transmitDevices.add(device);
+    }
+
+    public void removeTransmit(Device device) {
+        if (device == null) return;
+        transmitDevices.remove(device);
+    }
+
 
     public String toString() {
         return this.name + "'s connected items => "

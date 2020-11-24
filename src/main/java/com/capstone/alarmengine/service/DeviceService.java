@@ -23,7 +23,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 @Service
-@Transactional
 public class DeviceService {
     @Autowired
     private DeviceRepository deviceRepository;
@@ -41,25 +40,29 @@ public class DeviceService {
     public List<Device> getAllDownstreamDevices(String name) {return deviceRepository.findAllDownstreamDevices(name);}
 
     @Scheduled(fixedRate = 1000)
+    @Transactional
     void updateAllDevices() {
         pullDataService.login();
         pullDataService.getRealTimeToken();
-        Stream<Device> devices = getAllDevices();
-        devices.forEach(this::updateDevice);
-        log.info("NEW: All nodes get updated.");
+        Iterable<Device> devices = deviceRepository.findAll();
+        for (Device device : devices) {
+            updateDevice(device);
+        }
+        for (Device device : devices) {
+            updateTransmission(device);
+        }
     }
 
     void updateDevice(Device d) {
 
         if (d == null) return;
         String name = d.getName();
-        d.setSubstation();
         String[] doubleTags = {"Ia", "Ib", "Ic", "Vab", "Vbc", "Vca"};
         String[] boolTags = {"BkrOpen","isTripped"};
         for (String tag : doubleTags) {
             String res = pullDataService.postRealTimeData(Arrays.asList(name+"."+tag));
-            JSONObject object = new JSONObject(res);
-            String valueStr = object.optJSONArray("Data").getJSONObject(0).optString("Value");
+            JSONObject jsob = new JSONObject(res);
+            String valueStr = jsob.optJSONArray("Data").getJSONObject(0).optString("Value");
             if (valueStr.length() == 0) continue;
             Double value = Double.valueOf(valueStr);
             switch (tag) {
@@ -85,33 +88,48 @@ public class DeviceService {
         }
         for (String tag : boolTags) {
             String res = pullDataService.postRealTimeData(Arrays.asList(name+"."+tag));
-            JSONObject object = new JSONObject(res);
-            String valueStr = object.optJSONArray("Data").getJSONObject(0).optString("Value");
+            JSONObject jsob = new JSONObject(res);
+            String valueStr = jsob.optJSONArray("Data").getJSONObject(0).optString("Value");
             if (valueStr.length() == 0) continue;
+            Boolean value = valueStr.equals("0") ? false : true;
             switch (tag) {
                 case "BkrOpen":
-                    d.setBreaker(valueStr.equals("0") ? "open" : "closed");
+                    d.setBkrOpen(value);
                     break;
                 case "isTripped":
-                    d.setIsTripped(valueStr.equals("0") ? false : true);
+                    d.setIsTripped(value);
                     break;
             }
         }
-
-
         deviceRepository.save(d);
+
+    }
+
+    @Transactional
+    public void updateTransmission(Device d) {
+        if (d == null || d.getConnectedDevices() == null) return;
+
+        if (d.getBkrOpen() || d.getIsTripped()) {
+            for (Device downstreamDevice : d.getConnectedDevices()) {
+                deviceRepository.deleteTransmit(d.getName(), downstreamDevice.getName());
+            }
+            return;
+        }
+        for (Device downstreamDevice : d.getConnectedDevices()) {
+            if (downstreamDevice.getBkrOpen() || downstreamDevice.getIsTripped()) {
+                deviceRepository.deleteTransmit(d.getName(), downstreamDevice.getName());
+            } else if (downstreamDevice.getIa() > 0 || downstreamDevice.getIb() > 0 || downstreamDevice.getIc() > 0) {
+                deviceRepository.createTransmit(d.getName(), downstreamDevice.getName());
+            }
+        }
     }
 
     public void updateModel() {
         log.info("starting");
         deviceRepository.deleteAll();
-
-        log.info("connecting");
-
         ObjectMapper mapper = new ObjectMapper();
         TypeReference<List<Device>> typeReference = new TypeReference<List<Device>>() {};
 
-        // InputStream inputStream = TypeReference.class.getResourceAsStream("/json/model.json");
         try {
             File modelFile = new File("./uploads/model.json");
             InputStream inputStream = new FileInputStream(modelFile);
@@ -126,6 +144,7 @@ public class DeviceService {
                     if (d2 == null) d2 = nei;
                     d1.connect(d2);
                 }
+                log.info(d1.getName());
                 deviceRepository.save(d1);
             }
             log.info("INITIAL: Model saved to database.");
