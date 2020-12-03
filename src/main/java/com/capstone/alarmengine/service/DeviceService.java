@@ -101,7 +101,7 @@ public class DeviceService {
                     break;
             }
         }
-        d.setSubstation();
+        d.setSubstation(name);
         deviceRepository.save(d);
 
     }

@@ -23,7 +23,7 @@ public class Device {
 
     private String name;
 
-    private String substation; //High_Voltage, Medium_Voltage, Low_Voltage
+    private String substation = ""; //High_Voltage, Medium_Voltage, Low_Voltage
 
     private Double Ia;    // Current A
     private Double Ib;    // Current B
@@ -40,7 +40,7 @@ public class Device {
 
     public Device(String name) {
         this.name = name;
-        setSubstation();
+        setSubstation(name);
         isTripped = true;
         bkrOpen = true;
         Ia = .0;
@@ -99,8 +99,8 @@ public class Device {
         return substation;
     }
 
-    public void setSubstation() {
-        String[] subNames = this.name.split("\\.");
+    public void setSubstation(String name) {
+        String[] subNames = name.split("\\.");
         for(String subName: subNames){
             if(substation_map.containsKey(subName)){
                 this.substation = substation_map.get(subName);
