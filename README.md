@@ -3,7 +3,7 @@ Welcome to Power Distribution Engine - Backend
 
 [Final Report](https://docs.google.com/document/d/1waMC8Dy008sGkTmT8QTbn4Z5YRN4rB0j6Jkr6HAkVag/edit?usp=sharing)   
 [Final Presentation](https://docs.google.com/presentation/d/18VR-pmh6YDRFnFCeVbwGybzk4kBMESyPSW89sCM0Lqk/edit?usp=sharing)   
-[Front-end Code](https://github.com/Agnique/react-alarm-engine.git)   
+[Frontend Code](https://github.com/Agnique/react-alarm-engine.git)   
 [Links](https://docs.google.com/document/d/1yTTkP1E3tP8iVqp73hBIhuoGtjaZ4Is-NB16OYR9C54/edit?usp=sharing)
 ### Environment Setup
 This project uses SpringBoot (maven as management tool) as well as Neo4j to setup programming and running environment
@@ -28,7 +28,7 @@ After installing Neo4j descktop, create a new database with any name you like, b
 Click "start" to let the database run.
 ### DEMO
 After correctly setting up the environment, click the run AlarmEngineApplication button or right click in the AlarmEngineApplication file, the system starts running.
-You'll see stuff when you run front-end, and you can test APIs after importing a "model.json" file. (APIs are provided in the [final report](https://docs.google.com/document/d/1waMC8Dy008sGkTmT8QTbn4Z5YRN4rB0j6Jkr6HAkVag/edit?usp=sharing))
+You'll see stuff when you run frontend, and you can test APIs after importing a "model.json" file. (APIs are provided in the [final report](https://docs.google.com/document/d/1waMC8Dy008sGkTmT8QTbn4Z5YRN4rB0j6Jkr6HAkVag/edit?usp=sharing))
 ### Existing Problems
 1. This project assumes single source power flow in the network, and might have problems in multi-source power system.
 2. The current project doesn't provide alternative alarm and event message querying.
